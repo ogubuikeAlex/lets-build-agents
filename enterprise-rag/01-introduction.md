@@ -30,10 +30,11 @@ Run these commands in the terminal (Bash or PowerShell) to create the folder and
 ```bash
 # Create folder and files
 mkdir rag-project && cd rag-project
-touch .env main.py
 
 # Initialize a new uv project
 uv init
+
+touch .env
 
 # Add Google's Generative AI SDK
 uv add google-generativeai dotenv
