@@ -1,13 +1,19 @@
 # What, Why and How Of A Retrieval-Augmented Generation (RAG) System
 
 ## What is RAG
-**RAG** solves the scalability problem by automating the context injection step:
+Retrieval-Augmented Generation is an architecture where we give an LLM access to external knowledge it wasn't trained on. Our aim with this is to give it the ability to correctly answer questions beyond what it has memorized.
 
-1. **Index** your knowledge base (documents, databases, websites) into a vector store
-2. **Retrieve** only the most relevant chunks for a given query (using semantic search)
-3. **Augment** the LLM prompt with those retrieved chunks
-4. **Generate** a grounded, accurate response
+With RAG we can trun our previous hard-coded context approach into a dynamic, scalable system.
 
+`FUN FACT: This is the foundation of most AI applications you use.`
+
+## Components of A Semantic RAG System
+ 
+Our starting point is a **Naive Semantic RAG** system. 
+
+**Let not your heart be distressed,** "Naive" here doesn't mean bad, it means straightforward: embed everything, search by vector similarity, hand the result to the LLM. 
+
+The flow for this:
 ```
 User Query
     │
@@ -20,9 +26,24 @@ User Query
 [Prompt = Query + Retrieved Context]
     │
     ▼
-[LLM] ──────► Grounded Answer ✅
+[LLM] ──────► Grounded Answer
 ```
 
-RAG turns the hard-coded context approach into a dynamic, scalable system — the **foundation of most production AI applications today**.
-
----
+To implement this we would modularize it into three stages:
+ 
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        RAG PIPELINE                             │
+│                                                                 │
+│  ┌──────────────┐    ┌─────────────────┐    ┌───────────────┐  │
+│  │   INDEXING   │    │ RETRIEVE+FORMAT │    │  LLM + SEND   │  │
+│  │              │    │                 │    │               │  │
+│  │ .md files    │    │  User query     │    │  Context-rich │  │
+│  │     ↓        │───▶│      ↓          │───▶│  prompt sent  │  │
+│  │  Chunk text  │    │ Embed + search  │    │  to LLM       │  │
+│  │     ↓        │    │      ↓          │    │      ↓        │  │
+│  │  Embed +     │    │ Top-k chunks    │    │  Response     │  │
+│  │  store in DB │    │  formatted      │    │  → User       │  │
+│  └──────────────┘    └─────────────────┘    └───────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
