@@ -6,11 +6,11 @@ Each workshop takes you from a blank project to a working system, building intui
 
 ---
 
-## Workshop 1 — Build A RAGAS-evaluated enterprise hybrid RAG system. It combines indexed vector database retrieval with real-time API calls to provide the LLM with comprehensive, accurate context.
+### [ Workshop 1 ](https://github.com/ogubuikeAlex/lets-build-agents/tree/main/enterprise-rag) - Build A RAGAS-evaluated enterprise hybrid RAG system. It combines indexed vector database retrieval with real-time API calls to provide the LLM with comprehensive, accurate context.
 
 <img width="750" height="600" alt="image" src="https://github.com/user-attachments/assets/f5f36ff1-7820-4424-9a00-0b8ef610d356" />
 
-## More workshops coming
+### More workshops coming
 
 This repo grows with each session. Topics in the pipeline include tool-calling agents, multi-agent orchestration, memory systems, and production deployment patterns.
 
