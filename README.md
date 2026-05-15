@@ -1,42 +1,108 @@
-To install uv, use the standalone installer for your operating system to ensure it's available globally and can manage your Python versions for you. [1, 2] 
-## 1. Installation
-pip install uv [3, 4, 5] 
+# ENTERPRISE HYBRID RAG SYSTEM
+
+## Introduction: LLM As a Blackbox
+A Large Language Model (LLM) is an AI trained on vast data to predict and generate text.
+
+The "black box" nature of LLMs refers to our inability to fully comprehend how these systems, which contain billions of parameters and complex, non-linear neural networks, transform inputs into specific outputs. 
+
+While we can understand the high-level architecture and training processes, the exact reasoning path, internal decision-making processes, and the precise combination of weights leading to a specific output are generally too complex for a human to interpret.
+
+-------
+
+## Project Set up
+
+#### 1. Install uv
+Run the command matching the operating system. For Windows, use PowerShell. 
+
+* Linux / macOS (Bash):
+
+`curl -LsSf https://astral.sh/uv/install.sh | sh`
+
+* Windows (PowerShell):
+
+`powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
 
 ------------------------------
-## 2. Basic Commands
-uv has two ways to operate: the Project API (modern, recommended) and the pip-compatibility API (familiar pip syntax). [6, 7] 
-## Managing Projects (Modern Workflow)
-These commands automatically manage your virtual environment and pyproject.toml file. [6] 
+#### 2. Init Environment
+Run these commands in the terminal (Bash or PowerShell) to create the folder and initialize the environment. 
 
-* Start a new project: uv init my-project (Creates a folder with basic files like pyproject.toml).
-* Add a package: uv add requests (Installs it and adds it to your project files).
-* Remove a package: uv remove requests.
-* Run a script: uv run main.py (Runs the script inside the project's isolated environment).
-* Sync environment: uv sync (Ensures your local environment matches your lockfile). 
+```bash
+# Create folder and files
+mkdir rag-project && cd rag-project
+touch .env main.py
 
-## Using the pip Style (Legacy Compatibility) [13] 
-If you just want a faster version of pip for one-off tasks:
+# Initialize a new uv project
+uv init
 
-* Install a package: uv pip install requests.
-* Install from file: uv pip install -r requirements.txt.
-* List installed packages: uv pip list. [6, 8, 12, 14, 15] 
+# Add Google's Generative AI SDK
+uv add google-generativeai dotenv
+```
 
+#### 3. Create env and python Script 
+💡 Note: Get a free API key from [Google AI Studio](https://aistudio.google.com/apikey) 
+
+In your .env file. Add this and replace `Add-Your-actual-API-Key` in the code with your actual API key 
+```txt 
+GEMINI_API_KEY=Add-Your-actual-API-Key
+```
+In `main.py` paste the code below.
+```python
+from dotenv import load_dotenv
+from google import genai
+
+load_dotenv()
+
+# Setup API Key
+api_key = os.getenv('GEMINI_API_KEY')
+client = genai.Client(api_key=api_key)
+
+async def ask_gemini(prompt):
+    response = await client.aio.models.generate_content(
+        model='gemini-2.5-flash',
+        contents=f'{prompt}'
+    )
+    return {'prompt': prompt, 'message': f"RESPONSE: {response.text}\n{'-'*20}"}
+```
+
+#### Ask Question
+
+```markdown
+# Question 1: Known information
+
+ask_gemini("What are the months of the year?")
+
+# Question 2: Unknown/Future information
+# Note: "Orra.xyz" and its collab with "Rome Protocol" are specific crypto/web3 startups the model has no real-time data on.
+
+ask_gemini("When will Orra.xyz go live and collaborate with Rome protocol?")
+```
 ------------------------------
-## 3. Creating a requirements.txt
-In the uv ecosystem, you typically use a uv.lock file for reproducibility, but you can export to a standard text file if needed: [16] 
+#### 4. Run the Script
+Use uv run to execute the file. It will automatically handle the virtual environment.
 
-* Generate requirements.txt from project:
-uv export --format requirements.txt --output-file requirements.txt
+`uv run main.py`
 
-* Convert a pyproject.toml to requirements.txt (pip-style):
-uv pip compile pyproject.toml -o requirements.txt
 
-* The "old way" (like pip freeze):
-uv pip freeze > requirements.txt. [8, 15, 17, 18] 
 
-Pro Tip: If you have an existing requirements.txt and want to migrate to uv, run uv add -r requirements.txt. This will import those dependencies into a new uv-managed project automatically. 
+## The Problems and Limitation of an LLM - No Context
 
-# Models I Can USe For Free
-- Gemini 1.5 Flash: Optimized for speed and high-volume tasks (Free: 15 RPM, 1 million TPM, 1,500 RPD).
-- Gemini 1.5 Pro: Best for complex reasoning and multimodal tasks (Free: 2 RPM, 32,000 TPM, 50 RPD).- Gemini 1.0 Pro: A stable, versatile older model (Free: 15 RPM, 32,000 TPM, 1,500 RPD).
-- Gemini 1.5 Flash-8B: A highly efficient, smaller model for lighter workloads
+From the example above, we see that while an LLM works like a magic blackbox, it cannot help us when we need information it simply wasn't trained on.
+
+
+Attempt to resolve the isssue by adding context: Hard coded context
+Question: What if we are able to get relevant context an add that to a query
+What, Why and How of a rag system
+	- Honorable mention: Enterprise Rag system
+	- Data cleaning and Prep is necessary
+What are the components of our Naive Semantic RAG system
+	- Show A diagram
+	- Indexing and Storing Our DB + A Search engine
+		Why we need to index and why we need a search db
+		LanceDB -> Our 007 here
+	- Retrieve and Format User Query
+	- Send Formatted Context-Rich Query To LLM
+Adding RAGAS
+Turning this into a Hybrid System:
+	- Show Diagram For How It Combines
+	- Show how to add an API call
+Did RAGAS Improve with Hybrid Approach
