@@ -6,9 +6,9 @@ Each workshop takes you from a blank project to a working system, building intui
 
 ---
 
-## Workshop 1 — From LLM to RAG: Building a Context-Aware Agent
+## Workshop 1 — Build A RAGAS-evaluated enterprise hybrid RAG system. It combines indexed vector database retrieval with real-time API calls to provide the LLM with comprehensive, accurate context.
 
-> **What you'll build:** An entreprise hybrid Retrieval-Augmented Generation (RAG) system for ORRA.xyz that searches a local knowledge base *and* calls an external API to give an LLM the context it needs to answer accurately.
+<img width="750" height="600" alt="image" src="https://github.com/user-attachments/assets/f5f36ff1-7820-4424-9a00-0b8ef610d356" />
 
 ## More workshops coming
 
