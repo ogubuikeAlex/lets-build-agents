@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, Body
 from fastapi.responses import StreamingResponse
+from scaffdoc.scaffdoc.api.dbconfig import SessionLocal
 
 load_dotenv()
 
@@ -15,6 +16,14 @@ CHUNK_SIZE = 500
 OVERLAP = 50
 app = FastAPI()
 
+#https://www.google.com/search?q=how+to+use+SQL+aclchemy+to+add+postgres+and+pgvector+to+fast+api+api&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQIRiPAjIHCAIQIRiPAtIBCTI0ODE3ajBqNKgCALACAQ&sourceid=chrome&ie=UTF-8&udm=50&fbs=ADc_l-aN0CWEZBOHjofHoaMMDiKpV6Bbbmx4QVaoKkiRQ2jlwvCHF0Eqz8cUq4JjDCZnrJG3IQ9hSM-GoYfSAqo_zJgCMvOpVdSYAsbjg95qvZs6fXZQ0lD5v9kDCmt1QQwb7ZZDatDSSJJ051IoOozruQpEUpivuPFJlDVXLJb3Yk85Hcd2iSvCCnr6TUv_KzULj2nsNJN2&aep=10&ntc=1&mstk=AUtExfCfkiokcmRNEKcMsvaJVDrLfHxf1HUEHsCtVWfHg7ACOvPCb4xMNNi0x6Qlb6YGUQg4Fvfx_z_Sx4Qp4VRtrz-yJ9QBN3IWHYqM6BHagpFvcH8-ySkrR08z1td5nyWbJNhaunjHBvjqO351K-AENAObPK7WJJdZWeNqTsNiPKIoq9dicisLAGW5GPHP0MukIduKQLZlm3Aaf29nq5PFZ2DrHsNf1Y655luyatFnVq6BNVHhEAUtkyUpuxcrME0we2ELh4goYfwjqACKmDUoCneoV1NL1yzJh2gR2z1yGIDOksXnRyzERFGn9OYPzylOVtl139KJVAUGeQ&aioh=3&csuir=1&cs=1&mtid=BeMAao_bO62hi-gP_MTF8Aw
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @app.post('/')
 def welcome():
